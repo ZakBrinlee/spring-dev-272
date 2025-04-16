@@ -2,6 +2,7 @@
   "expo": {
     "name": "spring-dev-272",
     "owner": "zakbrinlee",
+    "githubUrl": "https://github.com/ZakBrinlee/spring-dev-272",
     "slug": "spring-dev-272",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +11,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.anonymous.spring-dev-272"
     },
     "android": {
@@ -18,11 +19,6 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",

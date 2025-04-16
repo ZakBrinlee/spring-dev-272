@@ -1,0 +1,32 @@
+[
+    {
+        "title": "The Gourmet Kitchen",
+        "location": "New York",
+        "rating": 4.5,
+        "link": "the-gourmet-kitchen"
+    },
+    {
+        "title": "Sushi Paradise",
+        "location": "Tokyo",
+        "rating": 4.8,
+        "link": "sushi-paradise"
+    },
+    {
+        "title": "Pasta Haven",
+        "location": "Rome",
+        "rating": 4.2,
+        "link": "pasta-haven"
+    },
+    {
+        "title": "Curry Delight",
+        "location": "Mumbai",
+        "rating": 4.7,
+        "link": "curry-delight"
+    },
+    {
+        "title": "Taco Fiesta",
+        "location": "Mexico City",
+        "rating": 4.3,
+        "link": "taco-fiesta"
+    }
+]
