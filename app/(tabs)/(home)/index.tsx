@@ -1,9 +1,10 @@
-import { StyleSheet, ScrollView, FlatList, View, TextInput } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { StyleSheet, FlatList } from 'react-native';
 import Card from '@/components/Card';
-import resurantData from '../../data/resturants.json';
+import resurantData from '../../../data/resturants.json';
 import { useState } from 'react';
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { Box } from '@/components/ui/box';
+import { Heading } from '@/components/ui/heading';
+import { Input, InputField } from '@/components/ui/input';
 
 /**
  * TODO: Update to utilize the new Gluestack UI.
@@ -19,8 +20,6 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(resurantData);
-  const backgroundColor = useThemeColor({}, 'background');
-  const color = useThemeColor({}, 'text');
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -31,14 +30,15 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <ThemedText type="subtitle">Travel Yummy Resturants</ThemedText>
-      <TextInput
-        style={[{ backgroundColor, color }, styles.searchInput]}
-        placeholder="Search restaurants..."
-        value={searchQuery}
-        onChangeText={handleSearch}
-      />
+    <Box className='flex-1 p-4 dark:bg-zinc-800'>
+      <Heading size='xl' className='self-center' >Search Yummy Resturants</Heading>
+      <Input variant="outline" size="md" className='bg-white dark:bg-zinc-900 mt-2'>
+        <InputField
+          placeholder="Search restaurants..."
+          value={searchQuery}
+          onChangeText={handleSearch}
+        />
+      </Input>
       <FlatList
         data={filteredData}
         keyExtractor={(item) => item.title}
@@ -48,7 +48,7 @@ export default function HomeScreen() {
           />
         )}
       />
-    </ScrollView>
+    </Box>
   );
 }
 

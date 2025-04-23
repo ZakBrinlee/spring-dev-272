@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { IconSymbol } from './ui/IconSymbol';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Link, LinkText } from './ui/link';
+import { useRouter } from 'expo-router';
 
 interface CardProps {
     title: string;
@@ -14,6 +15,14 @@ const Card: React.FC<CardProps> = ({ title, location, rating, link }) => {
       const backgroundColor = useThemeColor({}, 'background');
       const color = useThemeColor({}, 'text');
       const shadowColor = useThemeColor({}, 'shadowColor');
+      const router = useRouter();
+
+      const handleLinkPress = () => {
+        router.push({
+            pathname: '/(tabs)/(home)/[title]',
+            params: { title: link },
+        })
+      }
 
     return (
         <View style={[
@@ -23,9 +32,14 @@ const Card: React.FC<CardProps> = ({ title, location, rating, link }) => {
             <Text style={[styles.title, { color }]}>{title}</Text>
             <Text style={[styles.location, { color }]}>{location}</Text>
             <Text style={[styles.rating, { color }]}>Rating: {rating.toFixed(1)}</Text>
-            <TouchableOpacity style={styles.button} onPress={() => console.log(`Link pressed: ${link}`)}>
-                <Text style={styles.link}>See Details</Text>
-            </TouchableOpacity>
+            <Link
+                onPress={handleLinkPress}
+                className='flex-row items-center justify-center'
+            >
+                <LinkText className=' text-blue-500 text-lg no-underline'>
+                    See Details
+                </LinkText>
+            </Link>
         </View>
     );
 };
