@@ -5,6 +5,17 @@ import resurantData from '../../data/resturants.json';
 import { useState } from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
+/**
+ * TODO: Update to utilize the new Gluestack UI.
+ * TODO: Add JSDoc comments to component
+ * 
+ * Refinements:
+ * - Create a new page for the restaurant details.
+ * - Add a link to the new restaurant details page.
+ * - Utilize `route.params` to pass data to the new page.
+ * - Utilize `navigation.navigate` to navigate to the new page.
+ * - Update the details page with back buttonr
+ */
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(resurantData);
