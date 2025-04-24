@@ -1,109 +1,100 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+import { Box } from '@/components/ui/box';
+import { Button } from '@/components/ui/button';
+import { VStack } from '@/components/ui/vstack';
+import { Text } from '@/components/ui/text';
+import { HStack } from '@/components/ui/hstack';
+import React, { useReducer } from 'react';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+// Define the initial state
+const initialState = { favorites: [] as string[] };
 
-export default function TabTwoScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
-  );
+// Define the reducer function
+function favoritesReducer(
+  state: { favorites: string[] },
+  action: { type: 'add' | 'remove' | 'reset'; payload?: string }
+) {
+  switch (action.type) {
+    case 'add':
+      if (action.payload && !state.favorites.includes(action.payload)) {
+        return { favorites: [...state.favorites, action.payload] };
+      }
+      return state;
+    case 'remove':
+      return {
+        favorites: state.favorites.filter((item) => item !== action.payload),
+      };
+    case 'reset':
+      return { favorites: [] };
+    default:
+      throw new Error('Unknown action type');
+  }
 }
 
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});
+export default function FavoritesScreen() {
+  // Use the useReducer hook
+  const [state, dispatch] = useReducer(favoritesReducer, initialState);
+
+  const sampleItems = ['React', 'Expo', 'NativeWind', 'Gluestack'];
+
+  return (
+    <Box className="flex-1 justify-center items-center bg-light dark:bg-dark p-4">
+      <VStack className="items-center space-y-4">
+        <Text className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          Manage Favorites
+        </Text>
+        <Text className="text-lg text-gray-600 dark:text-gray-400">
+          Add or remove items from your favorites list.
+        </Text>
+
+        {/* Display the list of favorite items */}
+        <Box className="w-full p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <Text className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+            Your Favorites:
+          </Text>
+          {state.favorites.length > 0 ? (
+            state.favorites.map((item, index) => (
+              <HStack
+                space='sm'
+                key={index}
+                className="justify-between items-center bg-white dark:bg-gray-700 p-2 mb-2 rounded"
+              >
+                <Text className="text-gray-800 dark:text-gray-200">{item}</Text>
+                <Button
+                  onPress={() => dispatch({ type: 'remove', payload: item })}
+                  className="bg-red-500 dark:bg-red-700 px-2 py-1 rounded"
+                >
+                  <Text className="text-white text-sm">Remove</Text>
+                </Button>
+              </HStack>
+            ))
+          ) : (
+            <Text className="text-gray-600 dark:text-gray-400">
+              No favorites added yet.
+            </Text>
+          )}
+        </Box>
+
+        {/* Buttons to add sample items */}
+        <VStack space='md'>
+          {sampleItems.map((item) => (
+            <Button
+              key={item}
+              onPress={() => dispatch({ type: 'add', payload: item })}
+              className="bg-blue-500 dark:bg-blue-700 px-4 py-2 rounded"
+            >
+              <Text className="text-white">Add {item}</Text>
+            </Button>
+          ))}
+        </VStack>
+
+        {/* Reset button */}
+        <Button
+          onPress={() => dispatch({ type: 'reset' })}
+          className="bg-gray-500 dark:bg-gray-700 px-4 py-2 rounded mt-4"
+        >
+          <Text className="text-white">Reset Favorites</Text>
+        </Button>
+      </VStack>
+    </Box>
+  );
+}
