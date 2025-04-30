@@ -7,25 +7,27 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Button, ButtonText } from '@/components/ui/button';
 import { ThemeContext } from '../_layout';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { toggleColorMode } = useContext(ThemeContext);
+  const { colorMode } = useContext(ThemeContext);
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: true,
+        headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             position: 'absolute',
+            backgroundColor: colorMode === 'light' ? '#fff' : '#27272a',
           },
-          default: {},
+          default: {
+            backgroundColor: colorMode === 'light' ? '#fff' : '#27272a',
+          },
         }),
       }}
     >
@@ -34,11 +36,6 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-          headerRight: () => (
-            <Button onPress={toggleColorMode}>
-              <ButtonText>Theme</ButtonText>
-            </Button>
-          ),
         }}
       />
       <Tabs.Screen
