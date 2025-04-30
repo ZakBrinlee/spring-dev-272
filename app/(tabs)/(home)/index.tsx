@@ -30,7 +30,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <Box className='flex-1 p-4 dark:bg-zinc-800'>
+    <Box className='flex-1 p-4 dark:bg-zinc-700'>
       <Heading size='xl' className='self-center' >Search Yummy Resturants</Heading>
       <Input variant="outline" size="md" className='bg-white dark:bg-zinc-900 mt-2'>
         <InputField
