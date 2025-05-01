@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { createContext, useEffect, useState } from 'react';
 import 'react-native-reanimated';
+import { RestaurantProvider } from "@/components/ui/restaurant-context-provider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -48,11 +49,13 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode={colorMode}>
        <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
+        <RestaurantProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </RestaurantProvider>
       </ThemeContext.Provider>
       </GluestackUIProvider>
   );
