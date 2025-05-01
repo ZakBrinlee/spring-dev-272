@@ -33,7 +33,7 @@ const RestaurantCard: React.FC<Restaurant> = ({ title, location, rating, id, isF
                     />
                 </Pressable>
                 <Text className='text-md my-1 dark:text-white'>{location}</Text>
-                <Text className='text-md my-1 dark:text-white'>Rating: {rating.toFixed(1)}</Text>
+                <Text className='text-md my-1 dark:text-white'>Rating: {rating}</Text>
                 <Link
                     onPress={handleLinkPress}
                     className='flex-row items-center justify-center'
