@@ -1,7 +1,7 @@
 import { Box } from '@/components/ui/box';
 import { Heading } from '@/components/ui/heading';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import resturantData from '../../../data/resturants.json';
+import restaurantData from '../../../data/restaurants.json';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/components/ui/safe-area-view';
@@ -9,7 +9,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 
 export default function DetailsPage() {
   const { title: id } = useLocalSearchParams<{title: string}>();
-  const restaurant = resturantData.find((item) => item.id === id);
+  const restaurant = restaurantData.find((item) => item.id === id);
   const {
     location,
     rating,

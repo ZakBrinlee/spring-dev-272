@@ -1,10 +1,10 @@
 import { StyleSheet, FlatList } from 'react-native';
-import Card from '@/components/Card';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@/components/ui/box';
 import { Heading } from '@/components/ui/heading';
 import { Input, InputField } from '@/components/ui/input';
 import { useRestaurantContext } from '@/components/ui/restaurant-context-provider';
+import RestaurantCard from '@/components/RestaurantCard';
 
 export default function HomeScreen() {
   const { restaurants } = useRestaurantContext();
@@ -19,9 +19,21 @@ export default function HomeScreen() {
     setFilteredData(filtered);
   };
 
+  // Listen for changes in resturant data
+  useEffect(() => {
+    if (searchQuery === '') {
+      setFilteredData(restaurants);
+    } else {
+      const filtered = restaurants.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [restaurants]);
+
   return (
     <Box className='flex-1 p-4 dark:bg-zinc-700'>
-      <Heading size='xl' className='self-center' >Search Yummy Resturants</Heading>
+      <Heading size='xl' className='self-center' >Search Yummy Restaurants</Heading>
       <Input variant="outline" size="md" className='bg-white dark:bg-zinc-900 mt-2'>
         <InputField
           placeholder="Search restaurants..."
@@ -33,7 +45,7 @@ export default function HomeScreen() {
         data={filteredData}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (
-          <Card
+          <RestaurantCard
             {...item}
           />
         )}

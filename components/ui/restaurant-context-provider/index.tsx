@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import resturantData from '@/data/resturants.json';
+import restaurantData from '@/data/restaurants.json';
 
 export type Restaurant = {
     title: string;
@@ -20,7 +20,7 @@ type RestaurantContextType = {
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined);
 
 export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [restaurants, setRestaurants] = useState<Restaurant[]>(resturantData as Restaurant[]);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>(restaurantData as Restaurant[]);
 
     const addRestaurant = (restaurant: Restaurant) => {
         setRestaurants((prev) => [...prev, restaurant]);

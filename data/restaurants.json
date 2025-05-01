@@ -4,34 +4,34 @@
         "location": "New York",
         "rating": 4.5,
         "id": "the_gourmet_kitchen",
-        "isFavorite": true
+        "isFavorite": false
     },
     {
         "title": "Sushi Paradise",
         "location": "Tokyo",
         "rating": 4.8,
         "id": "sushi_paradise",
-        "isFavorite": true
+        "isFavorite": false
     },
     {
         "title": "Pasta Haven",
         "location": "Rome",
         "rating": 4.2,
         "id": "pasta_haven",
-        "isFavorite": true
+        "isFavorite": false
     },
     {
         "title": "Curry Delight",
         "location": "Mumbai",
         "rating": 4.7,
         "id": "curry_delight",
-        "isFavorite": true
+        "isFavorite": false
     },
     {
         "title": "Taco Fiesta",
         "location": "Mexico City",
         "rating": 4.3,
         "id": "taco_fiesta",
-        "isFavorite": true
+        "isFavorite": false
     }
 ]
