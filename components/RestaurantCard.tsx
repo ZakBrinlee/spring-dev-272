@@ -24,12 +24,13 @@ const RestaurantCard: React.FC<Restaurant> = ({ title, location, rating, id, isF
             <Card variant="filled" className="mt-4">
                 <Heading>{title}</Heading>
                 <Pressable
+                    className='absolute right-4 top-4 p-1'
                     onPress={() => toggleFavorite(id)}
                 >
                     <Icon 
                         as={FavouriteIcon}
                         size='xl'
-                        className={`${isFavorite ? 'text-red-500' : 'text-gray-500'} absolute right-4 top-4`}
+                        className={`${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
                     />
                 </Pressable>
                 <Text className='text-md my-1 dark:text-white'>{location}</Text>

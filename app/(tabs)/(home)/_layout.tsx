@@ -14,6 +14,7 @@ export default function HomeLayout() {
         headerShown: true,
         headerRight: () => (
           <Pressable
+            className='p-1'
             onPress={toggleColorMode}
           >
             <Icon 
