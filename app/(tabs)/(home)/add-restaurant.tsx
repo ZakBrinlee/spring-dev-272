@@ -8,6 +8,7 @@ import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@/components/ui/slider';
+import { useAddRestaurant } from '@/hooks/useAddRestaurant';
 
 // Validation schema for the restaurant form
 const ResturantSchema = Yup.object().shape({
@@ -18,8 +19,7 @@ const ResturantSchema = Yup.object().shape({
 
 const AddRestaurant =() => {
     const navigation = useNavigation();
-    const { addRestaurant } = useRestaurantContext();
-
+    const addRestaurant = useAddRestaurant();
     return (
         <Box className="flex-1 p-4 dark:bg-neutral-950">
             <Formik
@@ -31,7 +31,7 @@ const AddRestaurant =() => {
                 validationSchema={ResturantSchema}
                 onSubmit={(values, { resetForm }) => {
                     // Add the restaurant to the context
-                    addRestaurant({
+                    addRestaurant.mutate({
                         id: Date.now().toString(), // generate a unique id by timestamp
                         title: values.title,
                         location: values.location,

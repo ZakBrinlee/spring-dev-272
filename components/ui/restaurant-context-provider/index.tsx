@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import restaurantData from '@/data/restaurants.json';
+import { useGetRestaurants } from "@/hooks/useGetRestaurants";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export type Restaurant = {
     title: string;
@@ -10,6 +10,7 @@ export type Restaurant = {
 }
 
 type RestaurantContextType = {
+    isLoading: boolean;
     restaurants: Restaurant[];
     addRestaurant: (restaurant: Restaurant) => void;
     updateRestaurant: (id: string, updatedRestaurant: Partial<Restaurant>) => void;
@@ -20,7 +21,8 @@ type RestaurantContextType = {
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined);
 
 export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [restaurants, setRestaurants] = useState<Restaurant[]>(restaurantData as Restaurant[]);
+    const {data, isFetching} = useGetRestaurants();
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
     const addRestaurant = (restaurant: Restaurant) => {
         setRestaurants((prev) => [...prev, restaurant]);
@@ -42,8 +44,19 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         );
     };
 
+    useEffect(() => {
+        if (data && !isFetching) {
+            console.log("Fetched data: ", data);
+            setRestaurants(data as Restaurant[]);
+        }
+        if (isFetching) {
+            console.log("Fetching data...");
+        }
+
+    }, [data, isFetching])
+
     return (
-        <RestaurantContext.Provider value={{ restaurants, addRestaurant, updateRestaurant, toggleFavorite }}>
+        <RestaurantContext.Provider value={{ isLoading: isFetching, restaurants, addRestaurant, updateRestaurant, toggleFavorite }}>
             {children}
         </RestaurantContext.Provider>
     );
