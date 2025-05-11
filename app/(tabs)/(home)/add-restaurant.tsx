@@ -19,7 +19,7 @@ const ResturantSchema = Yup.object().shape({
 
 const AddRestaurant =() => {
     const navigation = useNavigation();
-    const addRestaurant = useAddRestaurant();
+    const { addRestaurant } = useRestaurantContext();
     return (
         <Box className="flex-1 p-4 dark:bg-neutral-950">
             <Formik
@@ -30,9 +30,8 @@ const AddRestaurant =() => {
                 }}
                 validationSchema={ResturantSchema}
                 onSubmit={(values, { resetForm }) => {
-                    // Add the restaurant to the context
-                    addRestaurant.mutate({
-                        id: Date.now().toString(), // generate a unique id by timestamp
+                    // Add the restaurant using the context method
+                    addRestaurant({
                         title: values.title,
                         location: values.location,
                         rating: values.rating,

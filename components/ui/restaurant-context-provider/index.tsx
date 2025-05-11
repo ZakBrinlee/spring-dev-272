@@ -1,3 +1,4 @@
+import { SupabaseNewRestaurant, useAddRestaurant } from "@/hooks/useAddRestaurant";
 import { useGetRestaurants } from "@/hooks/useGetRestaurants";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -12,7 +13,7 @@ export type Restaurant = {
 type RestaurantContextType = {
     isLoading: boolean;
     restaurants: Restaurant[];
-    addRestaurant: (restaurant: Restaurant) => void;
+    addRestaurant: (restaurant: SupabaseNewRestaurant) => void;
     updateRestaurant: (id: string, updatedRestaurant: Partial<Restaurant>) => void;
     toggleFavorite: (id: string) => void;
     // TODO: add delete method
@@ -22,10 +23,12 @@ const RestaurantContext = createContext<RestaurantContextType | undefined>(undef
 
 export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const {data, isFetching} = useGetRestaurants();
+    const addRestaurantMutation = useAddRestaurant();
+    
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-    const addRestaurant = (restaurant: Restaurant) => {
-        setRestaurants((prev) => [...prev, restaurant]);
+    const addRestaurant = async (restaurant: SupabaseNewRestaurant) => {
+        addRestaurantMutation.mutate(restaurant);
     };
 
     const updateRestaurant = (id: string, updatedRestaurant: Partial<Restaurant>) => {
@@ -56,7 +59,7 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }, [data, isFetching])
 
     return (
-        <RestaurantContext.Provider value={{ isLoading: isFetching, restaurants, addRestaurant, updateRestaurant, toggleFavorite }}>
+        <RestaurantContext.Provider value={{ isLoading: isFetching || addRestaurantMutation.isPending, restaurants, addRestaurant, updateRestaurant, toggleFavorite }}>
             {children}
         </RestaurantContext.Provider>
     );

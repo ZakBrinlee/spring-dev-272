@@ -43,7 +43,7 @@ export default function HomeScreen() {
       </Input>
       <FlatList
         data={filteredData}
-        keyExtractor={(item) => item.title}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <RestaurantCard
             {...item}
