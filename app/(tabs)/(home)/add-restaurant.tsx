@@ -1,6 +1,6 @@
 import { Box } from '@/components/ui/box';
 import { useRestaurantContext } from '@/components/ui/restaurant-context-provider';
-import { useNavigation } from 'expo-router';
+import { Stack, useLocalSearchParams, useNavigation } from 'expo-router';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Text } from '@/components/ui/text';
@@ -8,7 +8,6 @@ import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@/components/ui/slider';
-import { useAddRestaurant } from '@/hooks/useAddRestaurant';
 
 // Validation schema for the restaurant form
 const ResturantSchema = Yup.object().shape({
@@ -19,23 +18,51 @@ const ResturantSchema = Yup.object().shape({
 
 const AddRestaurant =() => {
     const navigation = useNavigation();
-    const { addRestaurant } = useRestaurantContext();
+    const { id = '' } = useLocalSearchParams<{id: string}>();
+    const { addRestaurant, restaurants, updateRestaurant } = useRestaurantContext();
+    const editRestaurant = restaurants.find((item) => item.id === id);
+
+    // If the restaurant is found, pre-fill the form with its details
+    const initialValues = editRestaurant
+        ? {
+            title: editRestaurant.title,
+            location: editRestaurant.location,
+            rating: editRestaurant.rating,
+        }
+        : {
+            title: '',
+            location: '',
+            rating: 0,
+        };
+
+
     return (
         <Box className="flex-1 p-4 dark:bg-neutral-950">
-            <Formik
-                initialValues={{
-                    title: '',
-                    location: '',
-                    rating: 0,
+            <Stack.Screen
+                options={{
+                title: initialValues.title || 'Add Restaurant',
                 }}
+            />
+            <Formik
+                initialValues={initialValues}
                 validationSchema={ResturantSchema}
-                onSubmit={(values, { resetForm }) => {
-                    // Add the restaurant using the context method
-                    addRestaurant({
-                        title: values.title,
-                        location: values.location,
-                        rating: values.rating,
-                    });
+                onSubmit={(values, { resetForm }) => {                   
+                    // If editing, update the restaurant
+                    if (editRestaurant) {
+                        updateRestaurant({
+                            ...editRestaurant,
+                            title: values.title,
+                            location: values.location,
+                            rating: values.rating,
+                        });
+                    } else {
+                        // Add a new restaurant
+                        addRestaurant({
+                            title: values.title,
+                            location: values.location,
+                            rating: values.rating,
+                        });
+                    }
 
                     // Reset the form
                     resetForm();

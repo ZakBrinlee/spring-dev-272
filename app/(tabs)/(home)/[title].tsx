@@ -1,15 +1,16 @@
 import { Box } from '@/components/ui/box';
 import { Heading } from '@/components/ui/heading';
-import { Stack, useLocalSearchParams, useNavigation } from 'expo-router';
+import { Stack, useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/components/ui/safe-area-view';
 import { useRestaurantContext } from '@/components/ui/restaurant-context-provider';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import { TrashIcon } from '@/components/ui/icon';
+import { EditIcon, TrashIcon } from '@/components/ui/icon';
+import { HStack } from '@/components/ui/hstack';
 
 export default function DetailsPage() {
-  const navigation = useNavigation();
+  const router = useRouter();
   const { title: id } = useLocalSearchParams<{title: string}>();
   const { restaurants, deleteRestaurant } = useRestaurantContext();
   const restaurant = restaurants.find((item) => item.id === id);
@@ -23,8 +24,16 @@ export default function DetailsPage() {
     if (restaurant) {
       deleteRestaurant(restaurant.id);
       // Navigate back to the previous screen
-      navigation.goBack();
+      router.back();
     }
+  };
+
+  const handleEdit = () => {
+    // Navigate to the edit screen with the restaurant id
+    router.push({
+      pathname: '/add-restaurant',
+      params: { id },
+    })
   };
 
   return (
@@ -40,14 +49,24 @@ export default function DetailsPage() {
             <Text size='lg'>Location: {location}</Text>
             <Text size='lg'>Rating: {rating}</Text>
         </VStack>
-        <Button 
-          size='lg'
-          action="negative"
-          onPress={handleDelete}
-        >
-          <ButtonIcon as={TrashIcon} />
-          <ButtonText>Delete</ButtonText>
-        </Button>
+        <HStack space="md" className='mt-4'>
+          <Button 
+            size='lg'
+            action="negative"
+            onPress={handleDelete}
+            >
+            <ButtonIcon as={TrashIcon} />
+            <ButtonText>Delete</ButtonText>
+          </Button>
+          <Button 
+            size='lg'
+            action="positive"
+            onPress={handleEdit}
+            >
+            <ButtonIcon as={EditIcon} />
+            <ButtonText>Edit</ButtonText>
+          </Button>
+        </HStack>
       </Box>
     </SafeAreaView>
   );
