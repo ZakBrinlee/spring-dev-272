@@ -1,6 +1,7 @@
 import { SupabaseNewRestaurant, useAddRestaurant } from "@/hooks/useAddRestaurant";
 import { useDeleteRestaurant } from "@/hooks/useDeleteRestaurant";
 import { useGetRestaurants } from "@/hooks/useGetRestaurants";
+import { useUpdateRestaurant } from "@/hooks/useUpdateRestaurant";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export type Restaurant = {
@@ -15,7 +16,7 @@ type RestaurantContextType = {
     isLoading: boolean;
     restaurants: Restaurant[];
     addRestaurant: (restaurant: SupabaseNewRestaurant) => void;
-    updateRestaurant: (id: string, updatedRestaurant: Partial<Restaurant>) => void;
+    updateRestaurant: (updatedRestaurant: Partial<Restaurant>) => void;
     toggleFavorite: (id: string) => void;
     deleteRestaurant: (id: string) => void;
 }
@@ -26,6 +27,7 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const {data, isFetching} = useGetRestaurants();
     const addRestaurantMutation = useAddRestaurant();
     const deleteRestaurantMutation = useDeleteRestaurant();
+    const updateRestaurantMutation = useUpdateRestaurant();
     
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
@@ -38,20 +40,16 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         deleteRestaurantMutation.mutate(restaurantId);
     };
 
-    const updateRestaurant = (id: string, updatedRestaurant: Partial<Restaurant>) => {
-        setRestaurants((prev) =>
-            prev.map((restaurant) =>
-                restaurant.id === id ? { ...restaurant, ...updatedRestaurant } : restaurant
-            )
-        );
+    const updateRestaurant = (updatedRestaurant: Partial<Restaurant>) => {
+        // Update the restaurant in supabase
+        updateRestaurantMutation.mutate(updatedRestaurant);
     };
 
     const toggleFavorite = (id: string) => {
-        setRestaurants((prev) =>
-            prev.map((restaurant) =>
-                restaurant.id === id ? { ...restaurant, isFavorite: !restaurant.isFavorite } : restaurant
-            )
-        );
+        const restaurantToToggle = restaurants.find((restaurant) => restaurant.id === id);
+        if (!restaurantToToggle) return;
+        // Toggle the isFavorite property using updateRestaurant
+        updateRestaurant({ ...restaurantToToggle, isFavorite: !restaurantToToggle.isFavorite });
     };
 
     useEffect(() => {
@@ -68,7 +66,7 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return (
         <RestaurantContext.Provider
             value={{ 
-                isLoading: isFetching || addRestaurantMutation.isPending || deleteRestaurantMutation.isPending,
+                isLoading: isFetching || addRestaurantMutation.isPending || deleteRestaurantMutation.isPending || updateRestaurantMutation.isPending,
                 restaurants,
                 addRestaurant,
                 updateRestaurant,
