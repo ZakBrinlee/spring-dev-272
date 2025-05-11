@@ -1,20 +1,31 @@
 import { Box } from '@/components/ui/box';
 import { Heading } from '@/components/ui/heading';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useNavigation } from 'expo-router';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/components/ui/safe-area-view';
 import { useRestaurantContext } from '@/components/ui/restaurant-context-provider';
+import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
+import { TrashIcon } from '@/components/ui/icon';
 
 export default function DetailsPage() {
+  const navigation = useNavigation();
   const { title: id } = useLocalSearchParams<{title: string}>();
-  const { restaurants } = useRestaurantContext();
+  const { restaurants, deleteRestaurant } = useRestaurantContext();
   const restaurant = restaurants.find((item) => item.id === id);
   const {
     location,
     rating,
     title
   } = restaurant || {};
+
+  const handleDelete = () => {
+    if (restaurant) {
+      deleteRestaurant(restaurant.id);
+      // Navigate back to the previous screen
+      navigation.goBack();
+    }
+  };
 
   return (
     <SafeAreaView className='flex-1 bg-white dark:bg-zinc-700'>
@@ -29,6 +40,14 @@ export default function DetailsPage() {
             <Text size='lg'>Location: {location}</Text>
             <Text size='lg'>Rating: {rating}</Text>
         </VStack>
+        <Button 
+          size='lg'
+          action="negative"
+          onPress={handleDelete}
+        >
+          <ButtonIcon as={TrashIcon} />
+          <ButtonText>Delete</ButtonText>
+        </Button>
       </Box>
     </SafeAreaView>
   );

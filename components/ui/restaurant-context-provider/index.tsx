@@ -1,4 +1,5 @@
 import { SupabaseNewRestaurant, useAddRestaurant } from "@/hooks/useAddRestaurant";
+import { useDeleteRestaurant } from "@/hooks/useDeleteRestaurant";
 import { useGetRestaurants } from "@/hooks/useGetRestaurants";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ type RestaurantContextType = {
     addRestaurant: (restaurant: SupabaseNewRestaurant) => void;
     updateRestaurant: (id: string, updatedRestaurant: Partial<Restaurant>) => void;
     toggleFavorite: (id: string) => void;
-    // TODO: add delete method
+    deleteRestaurant: (id: string) => void;
 }
 
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined);
@@ -24,11 +25,17 @@ const RestaurantContext = createContext<RestaurantContextType | undefined>(undef
 export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const {data, isFetching} = useGetRestaurants();
     const addRestaurantMutation = useAddRestaurant();
+    const deleteRestaurantMutation = useDeleteRestaurant();
     
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
     const addRestaurant = async (restaurant: SupabaseNewRestaurant) => {
         addRestaurantMutation.mutate(restaurant);
+    };
+
+    // Update restaurant by id
+    const deleteRestaurant = async (restaurantId: Restaurant['id']) => {
+        deleteRestaurantMutation.mutate(restaurantId);
     };
 
     const updateRestaurant = (id: string, updatedRestaurant: Partial<Restaurant>) => {
@@ -59,7 +66,15 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }, [data, isFetching])
 
     return (
-        <RestaurantContext.Provider value={{ isLoading: isFetching || addRestaurantMutation.isPending, restaurants, addRestaurant, updateRestaurant, toggleFavorite }}>
+        <RestaurantContext.Provider
+            value={{ 
+                isLoading: isFetching || addRestaurantMutation.isPending || deleteRestaurantMutation.isPending,
+                restaurants,
+                addRestaurant,
+                updateRestaurant,
+                toggleFavorite,
+                deleteRestaurant
+            }}>
             {children}
         </RestaurantContext.Provider>
     );
