@@ -1,15 +1,18 @@
+// eslint-disable-next-line import/namespace
 import "@/global.css";
-import { GluestackUIProvider, ModeType } from "@/components/ui/gluestack-ui-provider";
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { createContext, useEffect, useState } from 'react';
-import 'react-native-reanimated';
+import {
+  GluestackUIProvider,
+  ModeType,
+} from "@/components/ui/gluestack-ui-provider";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { createContext, useEffect, useState } from "react";
+import "react-native-reanimated";
 import { RestaurantProvider } from "@/components/ui/restaurant-context-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { supabase } from "@/utils/supabase";
-import { AppState } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,7 +46,7 @@ export default function RootLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
@@ -61,8 +64,8 @@ export default function RootLayout() {
       }
 
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: 'test@dev.com',
-        password: 'testtest',
+        email: "test@dev.com",
+        password: "testtest",
       });
 
       if (error) {
@@ -90,7 +93,7 @@ export default function RootLayout() {
         <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
           <RestaurantProvider>
             <Stack>
-              <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />
