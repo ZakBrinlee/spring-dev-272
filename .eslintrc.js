@@ -10,4 +10,11 @@ module.exports = {
     quotes: ["error", "double"], // enforces single quotes
     "comma-dangle": ["error", "always-multiline"], // enforces trailing commas
   },
+  overrides: [
+    {
+      // Test files only
+      files: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+      extends: ["plugin:testing-library/react"],
+    },
+  ],
 };

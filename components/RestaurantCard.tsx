@@ -3,13 +3,12 @@ import { Link, LinkText } from "./ui/link";
 import { useRouter } from "expo-router";
 import { Card } from "./ui/card";
 import { Heading } from "./ui/heading";
-import { Pressable } from "./ui/pressable";
 import { Text } from "./ui/text";
-import { FavouriteIcon, Icon } from "./ui/icon";
 import {
   Restaurant,
   useRestaurantContext,
 } from "./ui/restaurant-context-provider";
+import FavoriteButton from "./FavoriteButton";
 
 const RestaurantCard: React.FC<Restaurant> = ({
   title,
@@ -32,16 +31,10 @@ const RestaurantCard: React.FC<Restaurant> = ({
     <>
       <Card variant="filled" className="mt-4">
         <Heading>{title}</Heading>
-        <Pressable
-          className="absolute right-4 top-4 p-1"
-          onPress={() => toggleFavorite(id)}
-        >
-          <Icon
-            as={FavouriteIcon}
-            size="xl"
-            className={`${isFavorite ? "text-red-500" : "text-gray-500"}`}
-          />
-        </Pressable>
+        <FavoriteButton
+          isFavorite={isFavorite}
+          handleFavoriteToggle={() => toggleFavorite(id)}
+        />
         <Text className="text-md my-1 dark:text-white">{location}</Text>
         <Text className="text-md my-1 dark:text-white">Rating: {rating}</Text>
         <Link
