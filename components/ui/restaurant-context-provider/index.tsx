@@ -66,11 +66,7 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (data && !isFetching) {
-      console.log("Fetched data: ", data);
       setRestaurants(data as Restaurant[]);
-    }
-    if (isFetching) {
-      console.log("Fetching data...");
     }
   }, [data, isFetching]);
 
